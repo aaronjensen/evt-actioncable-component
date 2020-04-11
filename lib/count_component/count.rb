@@ -6,9 +6,14 @@ module CountComponent
     include Schema::DataStructure
 
     attribute :id, String
+    attribute :value, Numeric, default: 0
 
-    # TODO Implement attributes
-    # TODO Implement entity logic, predicates, mutations, calculations, etc
-    # Note: This class's methods should pertain only to its attributes
+    def increment
+      self.value += 1
+    end
+
+    def decrement
+      self.value -= 1
+    end
   end
 end

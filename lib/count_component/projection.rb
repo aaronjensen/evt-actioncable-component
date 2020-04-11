@@ -4,21 +4,16 @@
 module CountComponent
   class Projection
     include EntityProjection
-    # TODO include Messages::Events once events are implemented"
-    # include Messages::Events
+    include Messages::Events
 
     entity_name :count
 
-    # TODO Implement event projection blocks
-    # eg:
-    # apply SomethingHappened do |something_happened|
-    #   SetAttributes.(count, something_happened, copy: [
-    #     { :count_id => :id }
-    #   ])
+    apply Incremented do |_incremented|
+      count.increment
+    end
 
-    #   something_happened_time = Clock.parse(something_happened.time)
-
-    #   count.something_happened_time = something_happened_time
-    # end
+    apply Decremented do |_decremented|
+      count.decrement
+    end
   end
 end
