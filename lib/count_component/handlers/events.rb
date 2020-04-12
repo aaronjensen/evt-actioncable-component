@@ -7,15 +7,28 @@ module CountComponent
       include Messaging::Handle
       include Messaging::StreamName
       include Log::Dependency
-      # include Messages::Events once events are implemented
-      # include Messages::Events
+      include Messages::Events
+      dependency :store, Store
 
-      # Note: Delete this file if not handling events
+      def configure
+        Store.configure(self)
+      end
 
-      # TODO Implement event handler blocks
-      # eg:
-      # handle SomethingHappened do |something_happened|
-      # end
+      handle Incremented do |incremented|
+        count_id = incremented.count_id
+
+        count = store.fetch(count_id)
+
+        ActionCable.server.broadcast "count-#{count_id}", { count_id: count_id, value: count.value }
+      end
+
+      handle Decremented do |decremented|
+        count_id = decremented.count_id
+
+        count = store.fetch(count_id)
+
+        ActionCable.server.broadcast "count-#{count_id}", { count_id: count_id, value: count.value }
+      end
     end
   end
 end

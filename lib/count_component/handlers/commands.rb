@@ -37,7 +37,7 @@ module CountComponent
 
         stream_name = stream_name(count_id)
 
-        decremented = Incremented.follow(increment)
+        decremented = Decremented.follow(decrement)
 
         write.(decremented, stream_name)
       end
